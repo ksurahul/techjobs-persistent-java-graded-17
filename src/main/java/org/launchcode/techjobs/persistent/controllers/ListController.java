@@ -1,7 +1,9 @@
 package org.launchcode.techjobs.persistent.controllers;
 
 import org.launchcode.techjobs.persistent.models.Job;
+import org.launchcode.techjobs.persistent.models.data.EmployerRepository;
 import org.launchcode.techjobs.persistent.models.data.JobRepository;
+import org.launchcode.techjobs.persistent.models.data.SkillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +21,14 @@ import java.util.HashMap;
 @RequestMapping(value = "list")
 public class ListController {
 
+    // add employerRepository
+    @Autowired
+    private EmployerRepository employerRepository;
+
+    // added
+    @Autowired
+    private SkillRepository skillRepository;
+
     @Autowired
     private JobRepository jobRepository;
 
@@ -34,6 +44,9 @@ public class ListController {
 
     @RequestMapping("")
     public String list(Model model) {
+        // pass both employers and skill data from repos into template
+        model.addAttribute("employers", employerRepository.findAll());
+        model.addAttribute("skills", skillRepository.findAll());
 
         return "list";
     }

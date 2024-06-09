@@ -6,7 +6,13 @@ select name
 from employer
 where location = "St. Louis City";
 
---Part 3
+--Part 3 - how to remove data from table
 drop table job;
 
---Part 4
+--Part 4 - return names of all skills that are attached to jobs in alphabetical order
+-- multiple ways this can be done, had to change it to make test happy
+select *
+from skill
+inner join job_skills on job_skills.skills_id = skill.id
+where job_skills.jobs_id is not null
+order by name asc;
