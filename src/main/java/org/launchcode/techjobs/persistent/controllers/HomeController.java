@@ -1,6 +1,7 @@
 package org.launchcode.techjobs.persistent.controllers;
 
 import jakarta.validation.Valid;
+import org.launchcode.techjobs.persistent.models.Employer;
 import org.launchcode.techjobs.persistent.models.Job;
 import org.launchcode.techjobs.persistent.models.Skill;
 import org.launchcode.techjobs.persistent.models.data.EmployerRepository;
@@ -59,13 +60,19 @@ public class HomeController {
 
         if (errors.hasErrors()) {
             model.addAttribute("title", "Add Job");
-            model.addAttribute("employers", employerRepository.findAll()); // added to find employer by the new job
-            model.addAttribute("skills", skillRepository.findAll());
+//            model.addAttribute("employers", employerRepository.findAll()); // added to find employer by the new job
+//            model.addAttribute("skills", skillRepository.findAll());
             return "add";
+        }
+
+        Optional optEmployer = employerRepository.findById(employerId);
+        if (optEmployer.isPresent()) {
+            newJob.setEmployer((Employer) optEmployer.get());
         }
 
         List<Skill> skillObjs = (List<Skill>) skillRepository.findAllById(skills);
         newJob.setSkills(skillObjs);
+        jobRepository.save(newJob); // save it
 
         return "redirect:";
     }
@@ -76,7 +83,7 @@ public class HomeController {
         Optional optJob = jobRepository.findById(jobId);
         if (optJob.isPresent()) {
             Job job = (Job) optJob.get();
-            model.addAttribute("sills", job);
+            model.addAttribute("job", job);
         } else {
             return "redirect:../";
         }
